@@ -8,7 +8,102 @@
     <link rel='stylesheet' type='text/css' media='screen'>
     <style>
 
+main {
+    display       : flex;
+    flex-direction: column;
+    align-items   : center;
+    font-family: 'Indie Flower', cursive;
+    font-weight: 600;
+}
 
+#contenedor {
+    display              : grid;
+    align-items          : center;
+    justify-items        : center;
+    height: 60vh;
+    width: 60vh;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows   : repeat(2, 1fr);
+    grid-gap             : 10px;
+    background-color     : hsl(0, 0%, 30%);
+    border-radius        : 50%;
+    margin               : 20px;
+    grid-template-areas  :
+        "topl topr"
+        "botl botr";
+}
+
+#botonStart {
+    grid-area    : 1/1/3/3;
+    border-radius: 50%;
+    height       : 10vh;
+    width        : 12vh;
+    font-size: 4vh;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+#boton1 {
+    background   : #43a047;
+    border-radius: 100% 0px 50% 0px;
+    align-self   : end;
+    justify-self : end;
+    grid-area    : topl;
+}
+
+#boton2 {
+    background-color: #a52e2e;
+    border-radius   : 0px 100% 0px 50%;
+    align-self      : end;
+    justify-self    : start;
+    grid-area       : topr;
+}
+
+#boton3 {
+    background-color: #1976d2;
+    border-radius   : 0px 50% 0px 100%;
+    align-self      : start;
+    justify-self    : end;
+    grid-area       : botl;
+}
+
+#boton4 {
+    background-color: #c3ab25;
+    border-radius   : 50% 0px 100% 0px;
+    align-self      : start;
+    justify-self    : start;
+    grid-area       : botr;
+}
+
+.boton {
+    width          : 85%;
+    height         : 85%;
+    outline        : none;
+    border: 5px solid #0c0c0c18;
+}
+
+.boton:hover {
+    opacity: 85%;
+}
+
+.boton:active {
+    transform : scale(0.95, 0.95);
+    box-shadow: 0 1px #111;
+    filter    : brightness(150%) contrast(150%);
+    transition: 0.05s;
+}
+
+.light {
+    opacity: 1;
+    filter : brightness(150%) contrast(150%);
+}
+
+#salida, #status {
+    padding: 3px;
+    width: 5em;
+    font-size: 2em;
+    margin: 0;
+}
 
     </style>
 </head>
@@ -20,10 +115,14 @@
             <button id="boton2" class="boton" onclick="completar(2)"></button>
             <button id="boton3" class="boton" onclick="completar(3)"></button>
             <button id="boton4" class="boton" onclick="completar(4)"></button>
+            <button id="boton1" class="boton" onclick="evaluaRespuesta(1)"></button>
+            <button id="boton2" class="boton" onclick="evaluaRespuesta(2)"></button>
+            <button id="boton3" class="boton" onclick="evaluaRespuesta(3)"></button>
+            <button id="boton4" class="boton" onclick="evaluaRespuesta(4)"></button>
 
             <button id="botonStart">Start</button>
         </div>
-        <p id="salida">Round: </p>
+        <p id="salida">Round: </p><br>
         <p id="status"></p>
 
     </main>
@@ -40,8 +139,9 @@
 
         function start() {
             botonStart.disabled = true;
-            secuencia.push(obtenerNumeroRandom);
+            secuencia.push(obtenerNumeroRandom(1,5));
             iluminar(secuencia);
+            console.log(secuencia);
             respuesta = [];
             document.getElementById('salida').innerText = `Ronda: ${secuencia.length}`;
 
@@ -79,12 +179,12 @@
 
         }
 
-        function obtenerNumeroRandom(int, max) {
+        function obtenerNumeroRandom(min, max) {
             return Math.floor(Math.random() * (max - min) + min);
         }
 
         async function gameOver(){
-            document.getElementById("status").innerText = "Game Over!";
+            document.getElementById("status").innerText = 'Game Over!';
             for (let bot of botones) {
                 bot.classList.toggle("light");
                 bot.disabled = true;
