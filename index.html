@@ -13,8 +13,92 @@
     </style>
 </head>
 <body>
+    <main>
+        <div id="contenedor">
+            
+            <button id="boton1" class="boton" onclick="completar(1)"></button>
+            <button id="boton2" class="boton" onclick="completar(2)"></button>
+            <button id="boton3" class="boton" onclick="completar(3)"></button>
+            <button id="boton4" class="boton" onclick="completar(4)"></button>
+
+            <button id="botonStart">Start</button>
+        </div>
+        <p id="salida">Round: </p>
+        <p id="status"></p>
+
+    </main>
     <script>
 
+        const botones = document.querySelectorAll('.boton')
+
+        const botonStart = document.getElementById('botonStart');
+        
+        botonStart.onclick = start;
+
+        let secuencia = []
+        let respuesta = []
+
+        function start() {
+            botonStart.disabled = true;
+            secuencia.push(obtenerNumeroRandom);
+            iluminar(secuencia);
+            respuesta = [];
+            document.getElementById('salida').innerText = `Ronda: ${secuencia.length}`;
+
+        }
+
+        async function iluminar(sec) {
+            await sleep(500);
+            for(bot of sec) {
+                botones[bot-1].classList.toggle("light");
+                await sleep(1000);
+                botones[bot-1].classList.toggle("light");
+                await sleep(500);
+            }
+            botonStart.disabled = false;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function evaluaRespuesta(numeroBoton){
+            if(secuencia.length == 0){
+                return;
+            }
+            respuesta.push(numeroBoton);
+            for(let i = 0; i < respuesta.length; i++) {
+                if(respuesta[i] != secuencia[i]){
+                    gameOver();
+                    return;
+                }
+                if(respuesta.length === secuencia.length) {
+                    start();
+                }
+            }
+
+        }
+
+        function obtenerNumeroRandom(int, max) {
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+
+        async function gameOver(){
+            document.getElementById("status").innerText = "Game Over!";
+            for (let bot of botones) {
+                bot.classList.toggle("light");
+                bot.disabled = true;
+            }
+            await sleep(1500);
+                for (let bot of botones) {
+                bot.classList.toggle("light");
+                bot.disabled = false;
+            }
+            secuencia = [];
+            respuesta = [];
+        }
+
+ 
 
 
     </script>
